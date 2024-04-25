@@ -1,5 +1,4 @@
-// Define the function for creating the scatter plot
-function createScatterPlot(data, containerId)
+function createLineChart(data, containerId)
 {
     // Set the dimensions of the SVG container
     const width = 600;
@@ -23,15 +22,18 @@ function createScatterPlot(data, containerId)
         .domain([0, d3.max(data, d => d.y)])
         .range([innerHeight, margin.top]);
 
-    // Create circles for each data point
-    svg.selectAll('circle')
-        .data(data)
-        .enter()
-        .append('circle')
-        .attr('cx', d => xScale(d.x))
-        .attr('cy', d => yScale(d.y))
-        .attr('r', 5)
-        .attr('fill', 'steelblue');
+    // Define the line function
+    const line = d3.line()
+        .x(d => xScale(d.x))
+        .y(d => yScale(d.y));
+
+    // Append the line path
+    svg.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-width', 2)
+        .attr('d', line);
 
     // Create x-axis
     const xAxis = d3.axisBottom(xScale);
@@ -60,4 +62,4 @@ function createScatterPlot(data, containerId)
         .text('Y Axis Label');
 }
 
-export default createScatterPlot;
+export default createLineChart;
