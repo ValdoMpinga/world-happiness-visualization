@@ -131,12 +131,11 @@ class DataHelper
     }
 
     /**
- * Retrieves stacked bar chart data for the specified year.
- * 
- * @param {number} year The year for which data is requested.
- * @returns {Object[]} Array of objects containing stacked bar chart data for each country.
- */
-
+     * Retrieves stacked bar chart data for the specified year.
+     * 
+     * @param {number} year The year for which data is requested.
+     * @returns {Object[]} Array of objects containing stacked bar chart data for each country.
+     */
     async getStackedBarChartData(year)
     {
         const fileName = `worldHappiness${year}.csv`;
@@ -153,7 +152,6 @@ class DataHelper
         ];
         const data = await processStackedBarData(filePath, rowIndices)
 
-        // console.log(data);
         const groupedData = {};
         data.forEach(row =>
         {
@@ -186,6 +184,23 @@ class DataHelper
         return stackedBarChartData;
     }
 
+
+
+    /**
+     * Retrieves bubble bar chart data for the specified year.
+     * 
+     * @param {number} year The year for which data is requested.
+     * @returns {Object[]} Array of objects containing bubble bar chart data for each country.
+     */
+    async getSocialSupportVsFreedomData(year)
+    {
+        const fileName = `worldHappiness${year}.csv`;
+        const filePath = path.join(this.dataDirectory, fileName);
+        let data = await processBubbleChartData(filePath, ROW_INDICES.SocialSupport, ROW_INDICES.Freedom)
+
+        console.log(data);
+
+    }
     
 }
 
@@ -244,12 +259,44 @@ async function processStackedBarData(filePath, rowIndices)
                 const label = getKeyByValue(ROW_INDICES, rowIndex);
                 if (rowIndex === ROW_INDICES.Country)
                 {
-                    formattedRow[label] = row[rowIndex]; // Country should remain as string
+                    formattedRow[label] = row[rowIndex]; 
                 } else
                 {
                     formattedRow[label] = parseFloat(row[rowIndex]);
                 }
             });
+            return formattedRow;
+        });
+
+        return formattedData;
+    } catch (error)
+    {
+        console.error(`Error reading file ${filePath}:`, error);
+    }
+}
+
+
+async function processBubbleChartData(filePath, xIndex, yIndex)
+{
+    try
+    {
+        if (!fs.existsSync(filePath))
+        {
+            console.error(`File does not exist.`);
+            return null;
+        }
+
+        const df = new DataFrame(await DataFrame.fromCSV(filePath));
+        const data = df.toArray();
+
+        const formattedData = data.map(row =>
+        {
+            const formattedRow = {};
+            formattedRow['country'] = row[ROW_INDICES.Country]; 
+            formattedRow['SocialSupport'] = parseFloat(row[xIndex]);
+            formattedRow['Freedom'] = parseFloat(row[yIndex]); 
+            formattedRow['size'] = parseFloat(row[ROW_INDICES.Freedom]); 
+            
             return formattedRow;
         });
 
