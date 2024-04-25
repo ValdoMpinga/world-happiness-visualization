@@ -45,7 +45,8 @@ class DataHelper
     {
         let fileName = `worldHappiness${year}.csv`;
         let filePath = path.join(this.dataDirectory, fileName);
-        await processYearData(filePath, ROW_INDICES.HappinessScore, ROW_INDICES.Country)
+        let data = await processYearData(filePath, ROW_INDICES.HappinessScore, ROW_INDICES.Country)
+        console.log(data);
     }
 
 
@@ -59,7 +60,8 @@ class DataHelper
     {
         let fileName = `worldHappiness${year}.csv`;
         let filePath = path.join(this.dataDirectory, fileName);
-        await processYearData(filePath, ROW_INDICES.GDPerCapita, ROW_INDICES.HappinessScore);
+        let data = await processYearData(filePath, ROW_INDICES.GDPerCapita, ROW_INDICES.HappinessScore);
+        console.log(data);
 
     }
 
@@ -85,7 +87,6 @@ class DataHelper
             const happinessScoreColumn = ROW_INDICES.HappinessScore;
             const GDPPerCapitaColumn = ROW_INDICES.GDPerCapita;
 
-            // Process data for the current year
             const happinessData = await processYearData(filePath, happinessScoreColumn, GDPPerCapitaColumn);
 
             happinessData.forEach((row)=> {
@@ -98,8 +99,6 @@ class DataHelper
             let totalGDP = 0;
             happinessData.forEach(entry =>
             {
-                console.log("HappinessScore:", entry.HappinessScore);
-                console.log("GDPerCapita:", entry.GDPerCapita);
 
                 const happinessScore = parseFloat(entry.HappinessScore);
                 const GDPPerCapita = parseFloat(entry.GDPerCapita);
@@ -124,7 +123,70 @@ class DataHelper
             generalWorldHappinessScore,
             happinessByCountry
         });
+
+        return {
+            generalWorldHappinessScore,
+            happinessByCountry
+        }
     }
+
+    /**
+ * Retrieves stacked bar chart data for the specified year.
+ * 
+ * @param {number} year The year for which data is requested.
+ * @returns {Object[]} Array of objects containing stacked bar chart data for each country.
+ */
+
+    async getStackedBarChartData(year)
+    {
+        const fileName = `worldHappiness${year}.csv`;
+        const filePath = path.join(this.dataDirectory, fileName);
+        const rowIndices = [
+            ROW_INDICES.Country,
+            ROW_INDICES.HappinessScore,
+            ROW_INDICES.GDPerCapita,
+            ROW_INDICES.SocialSupport,
+            ROW_INDICES.HealthyLife,
+            ROW_INDICES.Freedom,
+            ROW_INDICES.Generosity,
+            ROW_INDICES.Corruption
+        ];
+        const data = await processStackedBarData(filePath, rowIndices)
+
+        // console.log(data);
+        const groupedData = {};
+        data.forEach(row =>
+        {
+            const country = row.Country;
+            if (!groupedData[country])
+            {
+                groupedData[country] = {
+                    Country: country,
+                    HappinessScore: 0,
+                    GDPerCapita: 0,
+                    SocialSupport: 0,
+                    HealthyLife: 0,
+                    Freedom: 0,
+                    Generosity: 0,
+                    Corruption: 0
+                };
+            }
+            Object.keys(row).forEach(key =>
+            {
+                if (key !== 'Country')
+                {
+                    groupedData[country][key] += parseFloat(row[key]);
+                }
+            });
+        });
+
+        const stackedBarChartData = Object.values(groupedData);
+
+        console.log(stackedBarChartData);
+        return stackedBarChartData;
+    }
+
+    
 }
 
 function getKeyByValue(object, value)
@@ -158,9 +220,46 @@ async function processYearData(filePath, row_one, row_two)
     } catch (error)
     {
         console.error(`Error reading file ${filePath}:`, error);
-        // return null; 
     }
 }
+
+async function processStackedBarData(filePath, rowIndices)
+{
+    try
+    {
+        if (!fs.existsSync(filePath))
+        {
+            console.error(`File does not exist.`);
+            return null;
+        }
+
+        const df = new DataFrame(await DataFrame.fromCSV(filePath));
+        const data = df.toArray();
+
+        const formattedData = data.map(row =>
+        {
+            const formattedRow = {};
+            rowIndices.forEach(rowIndex =>
+            {
+                const label = getKeyByValue(ROW_INDICES, rowIndex);
+                if (rowIndex === ROW_INDICES.Country)
+                {
+                    formattedRow[label] = row[rowIndex]; // Country should remain as string
+                } else
+                {
+                    formattedRow[label] = parseFloat(row[rowIndex]);
+                }
+            });
+            return formattedRow;
+        });
+
+        return formattedData;
+    } catch (error)
+    {
+        console.error(`Error reading file ${filePath}:`, error);
+    }
+}
+
 
 
 module.exports = DataHelper;

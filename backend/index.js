@@ -11,7 +11,8 @@ async function tester()
 
     // await dataHelper.getHappinessScoreByCountry(2015)
     // await dataHelper.getGPDvsHappinessScore(2015)
-    await dataHelper.getHappinessOverYearsData()
+    // await dataHelper.getHappinessOverYearsData()
+    await dataHelper.getStackedBarChartData(2016)
 }
 tester()
 
