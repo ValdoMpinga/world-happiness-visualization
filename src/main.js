@@ -2,6 +2,7 @@ import createBarChart from './components/barChartComponent.js';
 import createPieChart from './components/pieChartComponent.js';
 import createScatterPlot from './components/scatterPlotComponent.js';
 import createLineChart from './components/lineChartComponent.js';
+import createBubbleChart from './components/bubbleChartComponent.js';
 
 const data = [
     { label: 'A', value: 10 },
@@ -30,6 +31,19 @@ const scatterPlotData = [
     { x: 15, y: 16 }
 ];
 
+const bubbleChartData = [
+    { x: 1, y: 10, size: 30 },
+    { x: 2, y: 20, size: 40 },
+    { x: 3, y: 15, size: 20 },
+    { x: 4, y: 25, size: 35 },
+    { x: 5, y: 18, size: 25 },
+    { x: 6, y: 22, size: 45 },
+    { x: 7, y: 12, size: 30 },
+    { x: 8, y: 16, size: 25 },
+    { x: 9, y: 28, size: 40 },
+    { x: 10, y: 20, size: 35 }
+];
+
 
 
 // Container id where the chart will be rendered
@@ -40,3 +54,4 @@ createBarChart(data, containerId);
 createPieChart(data, containerId);
 createScatterPlot(scatterPlotData, containerId);
 createLineChart(scatterPlotData, containerId);
+createBubbleChart(bubbleChartData, containerId);
