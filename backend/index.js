@@ -2,6 +2,16 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const DataHelper = require('./helpers/DataHelper');
+
+const dataHelper = new DataHelper()
+
+async function tester()
+{
+    
+    await dataHelper.getHappinessScoreData(2015)
+}
+tester()
 
 app.get('/test', (req, res) =>
 {
