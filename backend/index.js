@@ -9,7 +9,8 @@ const dataHelper = new DataHelper()
 async function tester()
 {
     
-    await dataHelper.getHappinessScoreData(2015)
+    // await dataHelper.getHappinessScoreByCountry(2015)
+    await dataHelper.getGPDvsHappinessScore(2015)
 }
 tester()
 

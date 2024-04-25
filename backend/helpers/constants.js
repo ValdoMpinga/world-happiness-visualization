@@ -6,4 +6,29 @@ const YEARS = {
     '2019': 2019
 };
 
-module.exports = { YEARS };
+const CHART_TYPE = {
+    'pie': 'pie',
+    'bar': 'bar',
+    'scatter': 'scatter',
+    'line': 'line',
+    'bubble': 'bubble',
+    'stackedBar': 'stackedBar',
+}
+
+const ROW_INDICES = {
+    "Country": 0,
+    'HappinessRank': 1,
+    'HappinessScore': 2,
+    'GDPerCapita': 3,
+    'SocialSupport': 4,
+    'HealthyLife': 5,
+    "Freedom": 6,
+    "Generosity": 7,
+    "Corruption": 8,
+    "Year": 9
+};
+
+
+module.exports = {
+    YEARS, CHART_TYPE, ROW_INDICES
+};

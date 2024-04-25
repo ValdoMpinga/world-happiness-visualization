@@ -2,18 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const DataFrame = require('dataframe-js').DataFrame;
 const ExcelJS = require('exceljs');
-const { YEARS } = require('../helpers/constants');
+const { ROW_INDICES } = require('../helpers/constants');
 
 const dataDirectory = path.join(__dirname, '../data/');
 
 class DataHelper
 {
-    worldHappinessData_2015 = null
-    worldHappinessData_2016 = null
-    worldHappinessData_2017 = null
-    worldHappinessData_2018 = null
-    worldHappinessData_2018 = null
-    worldHappinessData_2018 = null
 
     constructor()
     {
@@ -21,42 +15,58 @@ class DataHelper
     }
 
     /**
-     * Retrieves all the existing files of each year.
-     * 
-     * @returns {Array} Array containing all the existing file names.
-     */
-    getFileNames()
-    {
-        try
-        {
-            // Read files in data directory
-            const files = fs.readdirSync(dataDirectory);
-            // Filter files with .csv extension
-            const csvFiles = files.filter(file => file.endsWith('.csv'));
-            return csvFiles;
-        } catch (error)
-        {
-            console.error('Error reading data directory:', error);
-            return [];
-        }
-    }
-
-    /**
-     * Retrieves data for happiness score.
+     * Retrieves data for happiness score by country.
      * 
      * @param {number} year The year for which data is requested.
      * @returns {Object} Object containing the label 'Country' and the value 'Happiness Score'.
      */
-    async getHappinessScoreData(YEAR)
+    async getHappinessScoreByCountry(year)
     {
-        let fileName = `worldHappiness${YEAR}.csv`;
+        let fileName = `worldHappiness${year}.csv`;
         let filePath = path.join(this.dataDirectory, fileName);
-        await processYearData(filePath)
+        await processYearData(filePath, ROW_INDICES.HappinessScore, ROW_INDICES.Country)
     }
+
+
+    /**
+   * Retrieves data for GDP vs happiness score scatter plot.
+   * 
+   * @param {number} year The year for which data is requested.
+   * @returns {Object} Object containing the label 'GDP' and the value 'Happiness Score'.
+   */
+    async getGPDvsHappinessScore(year)
+    {
+        let fileName = `worldHappiness${year}.csv`;
+        let filePath = path.join(this.dataDirectory, fileName);
+        await processYearData(filePath, ROW_INDICES.GDPerCapita, ROW_INDICES.HappinessScore);
+
+    }
+
+
+    /**
+     * Retrieves  for happiness over the years.
+     * 
+     * @param {number} year The year for which data is requested.
+     * @returns {Object} Object containing the label 'Country' and the value 'Happiness Score'.
+     */
+    async getHappinessOverYearsData(year)
+    {
+        let fileName = `worldHappiness${year}.csv`;
+        let filePath = path.join(this.dataDirectory, fileName);
+        await processYearData(filePath, ROW_INDICES.Country, ROW_INDICES.HappinessScore);
+
+    }
+
+
 
 }
 
-async function processYearData(filePath)
+function getKeyByValue(object, value)
+{
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+async function processYearData(filePath, row_one, row_two)
 {
     try
     {
@@ -66,15 +76,16 @@ async function processYearData(filePath)
             return null;
         }
 
-        // Read the CSV file into the DataFrame
         const df = new DataFrame(await DataFrame.fromCSV(filePath));
 
-        const data = df.toArray(); // Convert DataFrame to array of arrays
+        const data = df.toArray();
 
-        // Map each row to an object with 'label' and 'value' properties
+        x_label = getKeyByValue(ROW_INDICES, row_one)
+        y_label = getKeyByValue(ROW_INDICES, row_two)
+
         const formattedData = data.map(row => ({
-            label: row[0], // Country
-            value: row[2] // Happiness Score
+            [x_label]: row[row_one],
+            [y_label]: row[row_two]
         }));
 
         console.log(formattedData);
@@ -84,7 +95,6 @@ async function processYearData(filePath)
         // return null; 
     }
 }
-
 
 
 module.exports = DataHelper;
