@@ -15,6 +15,27 @@ class DataHelper
     }
 
     /**
+     * Retrieves all the existing files of each year.
+     * 
+     * @returns {Array} Array containing all the existing file names.
+     */
+    getFileNames()
+    {
+        try
+        {
+            const files = fs.readdirSync(dataDirectory);
+            // Filter files with .csv extension
+            const csvFiles = files.filter(file => file.endsWith('.csv'));
+            return csvFiles;
+        } catch (error)
+        {
+            console.error('Error reading data directory:', error);
+            return [];
+        }
+    }
+
+
+    /**
      * Retrieves data for happiness score by country.
      * 
      * @param {number} year The year for which data is requested.
@@ -49,16 +70,61 @@ class DataHelper
      * @param {number} year The year for which data is requested.
      * @returns {Object} Object containing the label 'Country' and the value 'Happiness Score'.
      */
-    async getHappinessOverYearsData(year)
+    async getHappinessOverYearsData()
     {
-        let fileName = `worldHappiness${year}.csv`;
-        let filePath = path.join(this.dataDirectory, fileName);
-        await processYearData(filePath, ROW_INDICES.Country, ROW_INDICES.HappinessScore);
+        const happinessByCountry = {}; // Object to store happiness scores by country
+        let totalWeightedSum = 0;
+        let totalWeight = 0;
 
+        const filesArray = this.getFileNames();
+
+        for (const fileName of filesArray)
+        {
+            const filePath = path.join(this.dataDirectory, fileName);
+            const year = parseInt(fileName.match(/\d+/)[0]); // Extract year from filename
+            const happinessScoreColumn = ROW_INDICES.HappinessScore;
+            const GDPPerCapitaColumn = ROW_INDICES.GDPerCapita;
+
+            // Process data for the current year
+            const happinessData = await processYearData(filePath, happinessScoreColumn, GDPPerCapitaColumn);
+
+            happinessData.forEach((row)=> {
+                row.HappinessScore = parseFloat(row.HappinessScore)
+                row.GDPerCapita = parseFloat(row.GDPerCapita)
+
+            })
+
+            let weightedSum = 0;
+            let totalGDP = 0;
+            happinessData.forEach(entry =>
+            {
+                console.log("HappinessScore:", entry.HappinessScore);
+                console.log("GDPerCapita:", entry.GDPerCapita);
+
+                const happinessScore = parseFloat(entry.HappinessScore);
+                const GDPPerCapita = parseFloat(entry.GDPerCapita);
+
+                if (!isNaN(happinessScore) && !isNaN(GDPPerCapita))
+                {
+                    weightedSum += happinessScore * GDPPerCapita;
+                    totalGDP += GDPPerCapita;
+                }
+            });
+
+
+            totalWeightedSum += weightedSum;
+            totalWeight += totalGDP; 
+
+            happinessByCountry[year] = weightedSum / totalGDP;
+        }
+
+        const generalWorldHappinessScore = totalWeightedSum / totalWeight;
+
+        console.log( {
+            generalWorldHappinessScore,
+            happinessByCountry
+        });
     }
-
-
-
 }
 
 function getKeyByValue(object, value)
@@ -88,10 +154,10 @@ async function processYearData(filePath, row_one, row_two)
             [y_label]: row[row_two]
         }));
 
-        console.log(formattedData);
+        return formattedData;
     } catch (error)
     {
-        console.error(`Error reading file ${fileName}:`, error);
+        console.error(`Error reading file ${filePath}:`, error);
         // return null; 
     }
 }
