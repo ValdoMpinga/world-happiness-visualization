@@ -3,6 +3,7 @@ import createPieChart from './components/pieChartComponent.js';
 import createScatterPlot from './components/scatterPlotComponent.js';
 import createLineChart from './components/lineChartComponent.js';
 import createBubbleChart from './components/bubbleChartComponent.js';
+import createStackedBarChart from './components/stackedBarChartComponent.js';
 
 const data = [
     { label: 'A', value: 10 },
@@ -44,14 +45,21 @@ const bubbleChartData = [
     { x: 10, y: 20, size: 35 }
 ];
 
+const stackedBarChartData = [
+    { category: 'A', value1: 10, value2: 20, value3: 15 },
+    { category: 'B', value1: 15, value2: 25, value3: 10 },
+    { category: 'C', value1: 20, value2: 15, value3: 25 },
+];
+
+stackedBarChartData.columns = ['category', 'value1', 'value2', 'value3'];
 
 
 // Container id where the chart will be rendered
 const containerId = '#chart-container';
 
-// Call the createBarChart function
 createBarChart(data, containerId);
 createPieChart(data, containerId);
 createScatterPlot(scatterPlotData, containerId);
 createLineChart(scatterPlotData, containerId);
 createBubbleChart(bubbleChartData, containerId);
+createStackedBarChart(stackedBarChartData, containerId);
