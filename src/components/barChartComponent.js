@@ -1,6 +1,4 @@
-//barChartComponent.js
 
-// Define the function for creating the bar chart
 function createBarChart(data, containerId)
 {
     // Set the dimensions of the SVG container
