@@ -54,7 +54,6 @@ const stackedBarChartData = [
 stackedBarChartData.columns = ['category', 'value1', 'value2', 'value3'];
 
 
-// Container id where the chart will be rendered
 const containerId = '#chart-container';
 
 createBarChart(data, containerId);
