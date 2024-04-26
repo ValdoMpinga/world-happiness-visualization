@@ -15,12 +15,14 @@ function createLineChart(data, containerId)
 
     // Create scales
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.x)])
+        .domain([d3.min(data, d => d.x), d3.max(data, d => d.x)])
         .range([margin.left, innerWidth]);
 
+
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.y)])
+        .domain([0, d3.max(data, d => parseFloat(d.y))]) // Convert y values to numbers
         .range([innerHeight, margin.top]);
+
 
     // Define the line function
     const line = d3.line()

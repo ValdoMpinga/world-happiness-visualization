@@ -46,7 +46,7 @@ class DataHelper
         let fileName = `worldHappiness${year}.csv`;
         let filePath = path.join(this.dataDirectory, fileName);
         let data = await processYearData(filePath, ROW_INDICES.HappinessScore, ROW_INDICES.Country)
-        console.log(data);
+        return data;
     }
 
 
@@ -61,7 +61,7 @@ class DataHelper
         let fileName = `worldHappiness${year}.csv`;
         let filePath = path.join(this.dataDirectory, fileName);
         let data = await processYearData(filePath, ROW_INDICES.GDPerCapita, ROW_INDICES.HappinessScore);
-        console.log(data);
+        return data;
 
     }
 
@@ -89,7 +89,8 @@ class DataHelper
 
             const happinessData = await processYearData(filePath, happinessScoreColumn, GDPPerCapitaColumn);
 
-            happinessData.forEach((row)=> {
+            happinessData.forEach((row) =>
+            {
                 row.HappinessScore = parseFloat(row.HappinessScore)
                 row.GDPerCapita = parseFloat(row.GDPerCapita)
 
@@ -112,14 +113,14 @@ class DataHelper
 
 
             totalWeightedSum += weightedSum;
-            totalWeight += totalGDP; 
+            totalWeight += totalGDP;
 
             happinessByCountry[year] = weightedSum / totalGDP;
         }
 
         const generalWorldHappinessScore = totalWeightedSum / totalWeight;
 
-        console.log( {
+        console.log({
             generalWorldHappinessScore,
             happinessByCountry
         });
@@ -180,7 +181,6 @@ class DataHelper
 
         const stackedBarChartData = Object.values(groupedData);
 
-        console.log(stackedBarChartData);
         return stackedBarChartData;
     }
 
@@ -198,10 +198,10 @@ class DataHelper
         const filePath = path.join(this.dataDirectory, fileName);
         let data = await processBubbleChartData(filePath, ROW_INDICES.SocialSupport, ROW_INDICES.Freedom)
 
-        console.log(data);
+        return data;
 
     }
-    
+
 }
 
 function getKeyByValue(object, value)
@@ -259,7 +259,7 @@ async function processStackedBarData(filePath, rowIndices)
                 const label = getKeyByValue(ROW_INDICES, rowIndex);
                 if (rowIndex === ROW_INDICES.Country)
                 {
-                    formattedRow[label] = row[rowIndex]; 
+                    formattedRow[label] = row[rowIndex];
                 } else
                 {
                     formattedRow[label] = parseFloat(row[rowIndex]);
@@ -292,11 +292,11 @@ async function processBubbleChartData(filePath, xIndex, yIndex)
         const formattedData = data.map(row =>
         {
             const formattedRow = {};
-            formattedRow['country'] = row[ROW_INDICES.Country]; 
+            formattedRow['country'] = row[ROW_INDICES.Country];
             formattedRow['SocialSupport'] = parseFloat(row[xIndex]);
-            formattedRow['Freedom'] = parseFloat(row[yIndex]); 
-            formattedRow['size'] = parseFloat(row[ROW_INDICES.Freedom]); 
-            
+            formattedRow['Freedom'] = parseFloat(row[yIndex]);
+            formattedRow['size'] = parseFloat(row[ROW_INDICES.Freedom]);
+
             return formattedRow;
         });
 

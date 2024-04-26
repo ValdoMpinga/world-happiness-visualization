@@ -1,12 +1,17 @@
-
-function createBarChart(data, containerId)
+function createBarChart(apiData, containerId)
 {
+    // Extract labels and values from the API data
+    const data = apiData.map(item => ({
+        label: item.Country,
+        value: parseFloat(item.HappinessScore)
+    }));
+
     // Set the dimensions of the SVG container
-    const width = 600;
+    const width = 1000;
     const height = 400;
 
     // Set the margins
-    const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+    const margin = { top: 20, right: 20, bottom: 50, left: 100 };
 
     // Calculate the inner width and height
     const innerWidth = width - margin.left - margin.right;
@@ -26,7 +31,7 @@ function createBarChart(data, containerId)
     const xScale = d3.scaleBand()
         .domain(data.map(d => d.label))
         .range([0, innerWidth])
-        .padding(0.1);
+        .padding(0.2); // Adjust the padding between bars
 
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.value)])
@@ -49,7 +54,12 @@ function createBarChart(data, containerId)
     chart.append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${innerHeight})`)
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll('text')
+        .style('text-anchor', 'end')
+        .attr('dx', '-.8em')
+        .attr('dy', '.15em')
+        .attr('transform', 'rotate(-45)');
 
     // Create the y-axis
     const yAxis = d3.axisLeft(yScale);
@@ -61,9 +71,9 @@ function createBarChart(data, containerId)
     chart.append('text')
         .attr('class', 'x-label')
         .attr('x', innerWidth / 2)
-        .attr('y', innerHeight + margin.bottom / 2)
+        .attr('y', innerHeight + margin.bottom / 1)
         .style('text-anchor', 'middle')
-        .text('X Axis Label');
+        .text('Countries');
 
     chart.append('text')
         .attr('class', 'y-label')
@@ -71,7 +81,7 @@ function createBarChart(data, containerId)
         .attr('x', -innerHeight / 2)
         .attr('y', -margin.left * 0.75)
         .style('text-anchor', 'middle')
-        .text('Y Axis Label');
+        .text('Happiness Score');
 }
 
 export default createBarChart;

@@ -1,57 +1,64 @@
 const express = require('express');
-const fs = require('fs');
+const cors = require('cors'); // Import the cors middleware
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DataHelper = require('./helpers/DataHelper');
 
 const dataHelper = new DataHelper()
 
-async function tester()
-{
+app.use(cors()); // Enable CORS for all routes
 
-    // await dataHelper.getHappinessScoreByCountry(2015)
-    // await dataHelper.getGPDvsHappinessScore(2015)
-    // await dataHelper.getHappinessOverYearsData()
-    // await dataHelper.getStackedBarChartData(2016)
-    await dataHelper.getSocialSupportVsFreedomData(2016)
-    
-}
-tester()
 
 app.get('/test', (req, res) =>
 {
     res.json("Yo");
 });
 
-app.get('/scatter-chart-data', (req, res) =>
+app.get('/bar-chart-data', async (req, res) =>
 {
+    const year = req.query.year;
+    let data = await dataHelper.getHappinessScoreByCountry(year)
+    res.send(data)
+});
+
+
+
+app.get('/scatter-chart-data', async (req, res) =>
+{
+    const year = req.query.year;
+
+    let data = await dataHelper.getGPDvsHappinessScore(year)
+    res.send(data)
 
 });
 
-app.get('/pie-chart-data', (req, res) =>
+
+
+app.get('/line-chart-data', async (req, res) =>
 {
+    let data = await dataHelper.getHappinessOverYearsData()
+    res.send(data)
 
 });
 
-app.get('/bar-chart-data', (req, res) =>
+app.get('/stacked-chart-data', async (req, res) =>
 {
+    const year = req.query.year;
+
+    let data = await dataHelper.getStackedBarChartData(year)
+    res.send(data)
 
 });
 
-app.get('/line-chart-data', (req, res) =>
+app.get('/bubble-chart-data', async (req, res) =>
 {
+    const year = req.query.year;
 
+    let data = await dataHelper.getSocialSupportVsFreedomData(year)
+    res.send(data)
 });
 
-app.get('/bubble-chart-data', (req, res) =>
-{
 
-});
-
-app.get('/stacked-bar-chart-data', (req, res) =>
-{
-
-});
 
 app.listen(PORT, () =>
 {

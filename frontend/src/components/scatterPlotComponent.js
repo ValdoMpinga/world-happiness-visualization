@@ -1,8 +1,7 @@
-// Define the function for creating the scatter plot
 function createScatterPlot(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 600;
+    const width = 1000;
     const height = 400;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
@@ -14,13 +13,13 @@ function createScatterPlot(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
-    // Create scales
+    // Create scales for x and y axes
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.x)])
+        .domain([0, d3.max(data, d => parseFloat(d.GDPerCapita))])
         .range([margin.left, innerWidth]);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.y)])
+        .domain([0, d3.max(data, d => parseFloat(d.HappinessScore))])
         .range([innerHeight, margin.top]);
 
     // Create circles for each data point
@@ -28,8 +27,8 @@ function createScatterPlot(data, containerId)
         .data(data)
         .enter()
         .append('circle')
-        .attr('cx', d => xScale(d.x))
-        .attr('cy', d => yScale(d.y))
+        .attr('cx', d => xScale(parseFloat(d.GDPerCapita)))
+        .attr('cy', d => yScale(parseFloat(d.HappinessScore)))
         .attr('r', 5)
         .attr('fill', 'steelblue');
 
@@ -50,14 +49,14 @@ function createScatterPlot(data, containerId)
         .attr('x', width / 2)
         .attr('y', height - margin.bottom / 2)
         .style('text-anchor', 'middle')
-        .text('X Axis Label');
+        .text('GDP per Capita');
 
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -height / 2)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
-        .text('Y Axis Label');
+        .text('Happiness Score');
 }
 
 export default createScatterPlot;
