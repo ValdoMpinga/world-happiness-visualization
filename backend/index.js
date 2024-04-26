@@ -1,12 +1,12 @@
 const express = require('express');
-const cors = require('cors'); // Import the cors middleware
+const cors = require('cors'); 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DataHelper = require('./helpers/DataHelper');
 
 const dataHelper = new DataHelper()
 
-app.use(cors()); // Enable CORS for all routes
+app.use(cors()); 
 
 
 app.get('/test', (req, res) =>
