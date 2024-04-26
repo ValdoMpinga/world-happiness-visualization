@@ -1,7 +1,7 @@
 function createBubbleChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 600;
+    const width = 800;
     const height = 400;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
@@ -15,16 +15,16 @@ function createBubbleChart(data, containerId)
 
     // Create scales
     const xScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.x)])
+        .domain([0, d3.max(data, d => d.Freedom)]) // Adjust to use Freedom for x-axis
         .range([margin.left, innerWidth]);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.y)])
+        .domain([0, d3.max(data, d => d.SocialSupport)]) // Adjust to use SocialSupport for y-axis
         .range([innerHeight, margin.top]);
 
     // Define the scale for the size of bubbles
     const rScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.size)])
+        .domain([0, d3.max(data, d => d.size)]) // Adjust to use size for bubble size
         .range([3, 30]); // Adjust the range of bubble sizes as needed
 
     // Create circles for each data point (bubbles)
@@ -32,9 +32,9 @@ function createBubbleChart(data, containerId)
         .data(data)
         .enter()
         .append('circle')
-        .attr('cx', d => xScale(d.x))
-        .attr('cy', d => yScale(d.y))
-        .attr('r', d => rScale(d.size)) // Set the radius based on the size of the data point
+        .attr('cx', d => xScale(d.Freedom)) // Adjust to use Freedom for x-coordinate
+        .attr('cy', d => yScale(d.SocialSupport)) // Adjust to use SocialSupport for y-coordinate
+        .attr('r', d => rScale(d.size)) // Set the radius based on the size property
         .attr('fill', 'steelblue')
         .attr('opacity', 0.7);
 
@@ -55,14 +55,14 @@ function createBubbleChart(data, containerId)
         .attr('x', width / 2)
         .attr('y', height - margin.bottom / 2)
         .style('text-anchor', 'middle')
-        .text('X Axis Label');
+        .text('Freedom'); // Adjust x-axis label
 
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -height / 2)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
-        .text('Y Axis Label');
+        .text('Social Support'); // Adjust y-axis label
 }
 
 export default createBubbleChart;

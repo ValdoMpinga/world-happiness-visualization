@@ -34,30 +34,24 @@ const scatterPlotData = [
     { x: 15, y: 16 }
 ];
 
-
-
-
+const bubbleChartMockData = [
+    { x: 1, y: 10, size: 30 },
+    { x: 2, y: 20, size: 40 },
+    { x: 3, y: 15, size: 20 },
+    { x: 4, y: 25, size: 35 },
+    { x: 5, y: 18, size: 25 },
+    { x: 6, y: 22, size: 45 },
+    { x: 7, y: 12, size: 30 },
+    { x: 8, y: 16, size: 25 },
+    { x: 9, y: 28, size: 40 },
+    { x: 10, y: 20, size: 35 }
+];
 
 class Main{
     constructor(){
         this.chartDataServiceInstance = new ChartDataService()
     }
 
-
-
-
-    // const bubbleChartData = [
-    //     { x: 1, y: 10, size: 30 },
-    //     { x: 2, y: 20, size: 40 },
-    //     { x: 3, y: 15, size: 20 },
-    //     { x: 4, y: 25, size: 35 },
-    //     { x: 5, y: 18, size: 25 },
-    //     { x: 6, y: 22, size: 45 },
-    //     { x: 7, y: 12, size: 30 },
-    //     { x: 8, y: 16, size: 25 },
-    //     { x: 9, y: 28, size: 40 },
-    //     { x: 10, y: 20, size: 35 }
-    // ];
 
 
     async buildBarChart(year)
@@ -107,6 +101,16 @@ class Main{
 
         createStackedBarChart(stackedBarChartData, containerId);
     }
+
+    async buildBubbleChart()
+    {
+        let bubbleChartData = await this.chartDataServiceInstance.getBubbleChartData(2017)
+        bubbleChartData = bubbleChartData.slice(0, 150);
+        console.log(bubbleChartData);
+
+
+        createBubbleChart(bubbleChartData, containerId);
+    }
     // createBarChart(data, containerId);
     // createPieChart(data, containerId);
     // createScatterPlot(scatterPlotData, containerId);
@@ -126,4 +130,5 @@ let main = new Main()
 // main.buildBarChart(2017)
 // main.buildScatterPlotChart(2017)
 // main.buildLineChart()
-main.buildStackedBarChart()
+// main.buildStackedBarChart()
+main.buildBubbleChart()
