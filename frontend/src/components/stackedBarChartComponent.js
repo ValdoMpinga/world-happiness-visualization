@@ -1,8 +1,8 @@
 function createStackedBarChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 600;
-    const height = 400;
+    const width = 1000;
+    const height = 600;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -13,9 +13,12 @@ function createStackedBarChart(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
+    // Extract the keys for stacked bars (excluding "Country" and "HealthyLife")
+    const keys = Object.keys(data[0]).filter(key => key !== 'Country' && key !== 'HealthyLife');
+
     // Define the stack generator
     const stack = d3.stack()
-        .keys(Object.keys(data[0]).slice(1)) // Exclude the first column (assuming it's the x-axis label)
+        .keys(keys)
         .order(d3.stackOrderNone)
         .offset(d3.stackOffsetNone);
 
@@ -24,7 +27,7 @@ function createStackedBarChart(data, containerId)
 
     // Create scales
     const xScale = d3.scaleBand()
-        .domain(data.map(d => d[data.columns[0]])) // Assuming the first column contains x-axis labels
+        .domain(data.map(d => d.Country))
         .range([margin.left, innerWidth])
         .padding(0.1);
 
@@ -35,7 +38,7 @@ function createStackedBarChart(data, containerId)
 
     // Create color scale
     const color = d3.scaleOrdinal()
-        .domain(series.map((d, i) => i))
+        .domain(keys)
         .range(d3.schemeCategory10);
 
     // Create groups for each series
@@ -50,7 +53,7 @@ function createStackedBarChart(data, containerId)
         .data(d => d)
         .enter()
         .append('rect')
-        .attr('x', d => xScale(d.data[data.columns[0]]))
+        .attr('x', d => xScale(d.data.Country))
         .attr('y', d => yScale(d[1]))
         .attr('height', d => yScale(d[0]) - yScale(d[1]))
         .attr('width', xScale.bandwidth());
@@ -59,7 +62,10 @@ function createStackedBarChart(data, containerId)
     const xAxis = d3.axisBottom(xScale);
     svg.append('g')
         .attr('transform', `translate(0, ${innerHeight})`)
-        .call(xAxis);
+        .call(xAxis)
+        .selectAll('text')
+        .style('text-anchor', 'end')
+        .attr('transform', 'rotate(-45)');
 
     // Create y-axis
     const yAxis = d3.axisLeft(yScale);
@@ -72,14 +78,34 @@ function createStackedBarChart(data, containerId)
         .attr('x', width / 2)
         .attr('y', height - margin.bottom / 2)
         .style('text-anchor', 'middle')
-        .text('X Axis Label');
+        .text('Country');
 
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -height / 2)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
-        .text('Y Axis Label');
+        .text('Healthy Life');
+
+    // Add legend
+    const legend = svg.append('g')
+        .attr('transform', `translate(${innerWidth - 10}, 20)`)
+        .selectAll('g')
+        .data(keys.slice().reverse())
+        .enter()
+        .append('g')
+        .attr('transform', (d, i) => `translate(0, ${i * 20})`);
+
+    legend.append('rect')
+        .attr('width', 18)
+        .attr('height', 18)
+        .attr('fill', color);
+
+    legend.append('text')
+        .attr('x', 24)
+        .attr('y', 9)
+        .attr('dy', '.35em')
+        .text(d => d);
 }
 
 // Export the function

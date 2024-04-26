@@ -100,10 +100,12 @@ class Main{
         stackedBarChartMockData.columns = ['category', 'value1', 'value2', 'value3'];
 
         let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(2017)
+        stackedBarChartData = stackedBarChartData.slice(0, 40);
+
         console.log(stackedBarChartData);
 
 
-        createStackedBarChart(stackedBarChartMockData, containerId);
+        createStackedBarChart(stackedBarChartData, containerId);
     }
     // createBarChart(data, containerId);
     // createPieChart(data, containerId);
