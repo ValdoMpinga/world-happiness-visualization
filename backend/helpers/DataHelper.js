@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const DataFrame = require('dataframe-js').DataFrame;
-const ExcelJS = require('exceljs');
 const { ROW_INDICES } = require('../helpers/constants');
 
 const dataDirectory = path.join(__dirname, '../data/');

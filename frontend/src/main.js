@@ -30,7 +30,6 @@ class Main
         createScatterPlot(scatterPlotChartData, containerId)
     }
 
-
     async buildLineChart()
     {
         let lineChart = await this.chartDataServiceInstance.getLineChartData()
@@ -73,14 +72,4 @@ class Main
 }
 
 let main = new Main()
-
-function chartsBuilder()
-{    
-    main.buildBarChart(2017)
-    main.buildScatterPlotChart(2017)
-    main.buildLineChart()
-    main.buildStackedBarChart()
-    main.buildBubbleChart()
-}
-
-chartsBuilder()
+window.main = main; 

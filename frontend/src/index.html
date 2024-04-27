@@ -5,15 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <header></header>
-    <main>
-      <h2>World Happiness</h2>
-          <div id="chart-container"></div>
-
+    <header>
+      <h1>World Happiness</h1>
+    </header>
+    <div class="side-menu">
+      <a data-class="bar" draggable="true" ondragstart="drag(event)"
+        >Happiness score by country</a
+      >
+      <a data-class="scatter" draggable="true" ondragstart="drag(event)"
+        >GDP and Happiness score correlation</a
+      >
+      <a data-class="line" draggable="true" ondragstart="drag(event)"
+        >Happiness score over the years</a
+      >
+      <a data-class="stacked" draggable="true" ondragstart="drag(event)"
+        >Stacked bars</a
+      >
+      <a data-class="bubble" draggable="true" ondragstart="drag(event)"
+        >Social support vs freedom</a
+      >
+    </div>
+    <main ondrop="drop(event)" ondragover="allowDrop(event)">
+      <div id="chart-container"></div>
     </main>
-    <footer></footer>
     <script src="main.js" type="module"></script>
+    <script>
+      const CHART_TYPE = {
+        bar: "bar",
+        scatter: "scatter",
+        line: "line",
+        bubble: "bubble",
+        stackedBar: "stacked",
+      };
+
+      function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.innerText);
+        ev.dataTransfer.setData("className", ev.target.dataset.class);
+      }
+
+      function allowDrop(ev) {
+        ev.preventDefault();
+      }
+
+      async function drop(ev) {
+        ev.preventDefault();
+        var className = ev.dataTransfer.getData("className");
+
+        console.log(className);
+
+        const main = window.main;
+
+        switch (className) {
+          case CHART_TYPE.bar:
+            main.buildBarChart(2016);
+            break;
+          case CHART_TYPE.scatter:
+            main.buildScatterPlotChart(2017);
+            break;
+          case CHART_TYPE.line:
+            main.buildLineChart();
+            break;
+          case CHART_TYPE.stackedBar:
+            main.buildStackedBarChart();
+            break;
+          case CHART_TYPE.bubble:
+            main.buildBubbleChart(2017);
+            break;
+        }
+      }
+    </script>
+    <footer></footer>
   </body>
 </html>
