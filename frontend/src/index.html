@@ -89,33 +89,81 @@
             )
         );
 
-        localStorage.setItem("appState", JSON.stringify(appStateWithNoDuplicateObjects));
+        localStorage.setItem(
+          "appState",
+          JSON.stringify(appStateWithNoDuplicateObjects)
+        );
 
         alert("Dashboard state saved!");
       }
-
       function chartsRenderer(chartType) {
+        // Define container IDs
+        const barChartContainerId = "#bar-chart-container";
+        const scatterChartContainerId = "#scatter-chart-container";
+        const lineChartContainerId = "#line-chart-container";
+        const stackedContainerId = "#stacked-chart-container";
+        const bubbleChartContainerId = "#bubble-chart-container";
+
+        // Check if the chart container is empty
+        let chartContainerIsEmpty = false;
         switch (chartType) {
           case CHART_TYPE.bar:
-            main.buildBarChart(2016);
-            window.appState.push({ chartType: CHART_TYPE.bar, year: 2016 });
+            chartContainerIsEmpty = !document
+              .querySelector(barChartContainerId)
+              .hasChildNodes();
             break;
           case CHART_TYPE.scatter:
-            main.buildScatterPlotChart(2017);
-            window.appState.push({ chartType: CHART_TYPE.scatter, year: 2017 });
+            chartContainerIsEmpty = !document
+              .querySelector(scatterChartContainerId)
+              .hasChildNodes();
             break;
           case CHART_TYPE.line:
-            main.buildLineChart();
-            window.appState.push({ chartType: CHART_TYPE.line });
+            chartContainerIsEmpty = !document
+              .querySelector(lineChartContainerId)
+              .hasChildNodes();
             break;
           case CHART_TYPE.stackedBar:
-            main.buildStackedBarChart(2017);
-            window.appState.push({ chartType: CHART_TYPE.stackedBar });
+            chartContainerIsEmpty = !document
+              .querySelector(stackedContainerId)
+              .hasChildNodes();
             break;
           case CHART_TYPE.bubble:
-            main.buildBubbleChart(2017);
-            window.appState.push({ chartType: CHART_TYPE.bubble, year: 2017 });
+            chartContainerIsEmpty = !document
+              .querySelector(bubbleChartContainerId)
+              .hasChildNodes();
             break;
+        }
+
+        // If the chart container is empty, render the chart
+        if (chartContainerIsEmpty) {
+          switch (chartType) {
+            case CHART_TYPE.bar:
+              main.buildBarChart(2016);
+              window.appState.push({ chartType: CHART_TYPE.bar, year: 2016 });
+              break;
+            case CHART_TYPE.scatter:
+              main.buildScatterPlotChart(2017);
+              window.appState.push({
+                chartType: CHART_TYPE.scatter,
+                year: 2017,
+              });
+              break;
+            case CHART_TYPE.line:
+              main.buildLineChart();
+              window.appState.push({ chartType: CHART_TYPE.line });
+              break;
+            case CHART_TYPE.stackedBar:
+              main.buildStackedBarChart(2017);
+              window.appState.push({ chartType: CHART_TYPE.stackedBar });
+              break;
+            case CHART_TYPE.bubble:
+              main.buildBubbleChart(2017);
+              window.appState.push({
+                chartType: CHART_TYPE.bubble,
+                year: 2017,
+              });
+              break;
+          }
         }
       }
     </script>
