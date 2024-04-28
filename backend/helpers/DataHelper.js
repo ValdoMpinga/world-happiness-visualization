@@ -119,10 +119,6 @@ class DataHelper
 
         const generalWorldHappinessScore = totalWeightedSum / totalWeight;
 
-        console.log({
-            generalWorldHappinessScore,
-            happinessByCountry
-        });
 
         return {
             generalWorldHappinessScore,

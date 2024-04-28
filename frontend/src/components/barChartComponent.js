@@ -1,5 +1,8 @@
 function createBarChart(apiData, containerId)
 {
+    const main = window.main;
+
+
     // Extract labels and values from the API data
     const data = apiData.map(item => ({
         label: item.Country,
@@ -11,7 +14,7 @@ function createBarChart(apiData, containerId)
     const height = 400;
 
     // Set the margins
-    const margin = { top: 20, right: 20, bottom: 50, left: 100 };
+    const margin = { top: 60, right: 20, bottom: 50, left: 100 };
 
     // Calculate the inner width and height
     const innerWidth = width - margin.left - margin.right;
@@ -23,9 +26,45 @@ function createBarChart(apiData, containerId)
         .attr('width', width)
         .attr('height', height);
 
-    // Create a group element for the chart
-    const chart = svg.append('g')
+    // Create a group element for the chart and dropdown
+    const chartGroup = svg.append('g')
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+    // Add a dropdown for selecting the year
+    const dropdown = chartGroup.append('foreignObject')
+        .attr('class', 'year-dropdown')
+        .attr('width', 120)
+        .attr('height', 30)
+        .attr('x', innerWidth - 120)
+        .attr('y', -40)
+        .append('xhtml:select')
+        .attr('class', 'year-select')
+        .on('change', function ()
+        {
+            console.log(main);
+            const selectedYear = this.value;
+            // Here you can handle the change of year and update the chart accordingly
+            console.log('Selected year:', selectedYear);
+            console.log(typeof (selectedYear));
+            removeChart()
+            setTimeout(() =>
+            {
+                main.buildBarChart(parseInt(selectedYear));
+            }, 300)
+
+        });
+
+    // Add options to the dropdown
+    const years = ['2015', '2016', '2017', '2018', '2019'];
+    dropdown.selectAll('option')
+        .data(years)
+        .enter()
+        .append('xhtml:option')
+        .attr('value', d => d)
+        .text(d => d);
+
+    // Create a group element for the chart
+    const chart = chartGroup.append('g');
 
     // Define the scales
     const xScale = d3.scaleBand()
@@ -82,10 +121,10 @@ function createBarChart(apiData, containerId)
         .attr('y', -margin.left * 0.75)
         .style('text-anchor', 'middle')
         .text('Happiness Score');
-    
+
     const removeButton = svg.append('g')
         .attr('class', 'remove-button')
-        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
+        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top - 40})`)
         .attr('cursor', 'pointer')
         .on('click', removeChart);
 

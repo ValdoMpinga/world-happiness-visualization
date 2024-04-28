@@ -13,6 +13,10 @@ function createLineChart(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
+    // Create a group for the line chart and remove button
+    const lineGroup = svg.append('g')
+        .attr('class', 'line-group');
+
     // Create scales
     const xScale = d3.scaleLinear()
         .domain([d3.min(data, d => d.x), d3.max(data, d => d.x)])
@@ -29,7 +33,7 @@ function createLineChart(data, containerId)
         .y(d => yScale(d.y));
 
     // Append the line path
-    svg.append('path')
+    lineGroup.append('path')
         .datum(data)
         .attr('fill', 'none')
         .attr('stroke', 'steelblue')
@@ -38,13 +42,13 @@ function createLineChart(data, containerId)
 
     // Create x-axis
     const xAxis = d3.axisBottom(xScale);
-    svg.append('g')
+    lineGroup.append('g')
         .attr('transform', `translate(0, ${innerHeight})`)
         .call(xAxis);
 
     // Create y-axis
     const yAxis = d3.axisLeft(yScale);
-    svg.append('g')
+    lineGroup.append('g')
         .attr('transform', `translate(${margin.left}, 0)`)
         .call(yAxis);
 
@@ -63,7 +67,7 @@ function createLineChart(data, containerId)
         .text('Y Axis Label');
 
     // Create the remove button
-    const removeButton = svg.append('g')
+    const removeButton = lineGroup.append('g')
         .attr('class', 'remove-button')
         .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
         .attr('cursor', 'pointer')

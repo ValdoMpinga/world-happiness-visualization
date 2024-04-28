@@ -6,7 +6,6 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="main.js" type="module"></script>
-    <script src="./helpers/localStorageHelper.js" type="module"></script>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
@@ -81,11 +80,17 @@
         console.log("app state saved to local storage!");
       }
 
-      function chartsRenderer(chartType) {
+      function chartsRenderer(chartType, year) {
         switch (chartType) {
           case CHART_TYPE.bar:
-            main.buildBarChart(2016);
-            window.appState.push({ chartType: CHART_TYPE.bar, year: 2016 });
+            if (year != null) {
+              console.log("build chart of " + year);
+              main.buildBarChart(year);
+            } else {
+              main.buildBarChart(2015);
+
+              window.appState.push({ chartType: CHART_TYPE.bar, year: 2016 });
+            }
             break;
           case CHART_TYPE.scatter:
             main.buildScatterPlotChart(2017);

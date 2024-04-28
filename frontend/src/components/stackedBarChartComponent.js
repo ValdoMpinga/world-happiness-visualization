@@ -1,7 +1,10 @@
 function createStackedBarChart(data, containerId)
 {
+    const main = window.main;
+
+
     // Set the dimensions of the SVG container
-    const width = 1000;
+    const width = 1200;
     const height = 600;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
@@ -16,6 +19,39 @@ function createStackedBarChart(data, containerId)
     // Create a group for the chart and remove button
     const chartGroup = svg.append('g')
         .attr('class', 'chart-group');
+
+    
+    // Add a dropdown for selecting the year below the chart
+    const dropdown = chartGroup.append('foreignObject')
+        .attr('class', 'year-dropdown')
+        .attr('width', 120)
+        .attr('height', 30)
+        .attr('x', innerWidth - 150) // Adjust x position
+        .attr('y', innerHeight + margin.top) // Position below the chart
+        .append('xhtml:select')
+        .attr('class', 'year-select')
+        .on('change', function ()
+        {
+            const selectedYear = this.value;
+            // Handle the change of year and update the stacked bar chart accordingly
+            console.log('Selected year:', selectedYear);
+            removeChart()
+            setTimeout(() =>
+            {
+                main.buildStackedBarChart(parseInt(selectedYear));
+            }, 300)
+        });
+
+
+    // Add options to the dropdown
+    const years = ['2015', '2016', '2017', '2018', '2019'];
+    dropdown.selectAll('option')
+        .data(years)
+        .enter()
+        .append('xhtml:option')
+        .attr('value', d => d)
+        .text(d => d);
+
 
     // Extract the keys for stacked bars (excluding "Country" and "HealthyLife")
     const keys = Object.keys(data[0]).filter(key => key !== 'Country' && key !== 'HealthyLife');

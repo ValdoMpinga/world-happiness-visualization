@@ -1,5 +1,7 @@
 function createBubbleChart(data, containerId)
 {
+    const main = window.main;
+
     // Set the dimensions of the SVG container
     const width = 800;
     const height = 400;
@@ -13,6 +15,44 @@ function createBubbleChart(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
+    // Create a group for the chart and dropdown
+    const chartGroup = svg.append('g')
+        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+    // Add a dropdown for selecting the year
+    const dropdown = chartGroup.append('foreignObject')
+        .attr('class', 'year-dropdown')
+        .attr('width', 120)
+        .attr('height', 30)
+        .attr('x', innerWidth - 150) // Adjust x position
+        .attr('y', innerHeight + margin.top) // Position below the chart
+        .append('xhtml:select')
+        .attr('class', 'year-select')
+        .on('change', function ()
+        {
+            const selectedYear = this.value;
+            // Handle the change of year and update the stacked bar chart accordingly
+            console.log('Selected year:', selectedYear);
+            removeChart()
+            setTimeout(() =>
+            {
+                main.buildBubbleChart(parseInt(selectedYear));
+            }, 300)
+        });
+
+
+    // Add options to the dropdown
+    const years = ['2015', '2016', '2017', '2018', '2019'];
+    dropdown.selectAll('option')
+        .data(years)
+        .enter()
+        .append('xhtml:option')
+        .attr('value', d => d)
+        .text(d => d);
+
+    // Create a group element for the chart
+    const chart = chartGroup.append('g');
+    
     // Create scales
     const xScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.Freedom)]) // Adjust to use Freedom for x-axis
@@ -28,7 +68,7 @@ function createBubbleChart(data, containerId)
         .range([3, 30]); // Adjust the range of bubble sizes as needed
 
     // Create circles for each data point (bubbles)
-    svg.selectAll('circle')
+    chartGroup.selectAll('circle')
         .data(data)
         .enter()
         .append('circle')
@@ -40,13 +80,13 @@ function createBubbleChart(data, containerId)
 
     // Create x-axis
     const xAxis = d3.axisBottom(xScale);
-    svg.append('g')
+    chartGroup.append('g')
         .attr('transform', `translate(0, ${innerHeight})`)
         .call(xAxis);
 
     // Create y-axis
     const yAxis = d3.axisLeft(yScale);
-    svg.append('g')
+    chartGroup.append('g')
         .attr('transform', `translate(${margin.left}, 0)`)
         .call(yAxis);
 
