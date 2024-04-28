@@ -11,7 +11,7 @@ function createBarChart(apiData, containerId)
     const height = 400;
 
     // Set the margins
-    const margin = { top: 20, right: 20, bottom: 100, left: 100 };
+    const margin = { top: 20, right: 20, bottom: 100, left: 50 };
 
     // Calculate the inner width and height
     const innerWidth = width - margin.left - margin.right;

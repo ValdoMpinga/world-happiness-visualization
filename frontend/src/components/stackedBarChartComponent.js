@@ -1,8 +1,8 @@
 function createStackedBarChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 1200; // Increased width to accommodate legends
-    const height = 600;
+    const width = 1000;
+    const height = 400;
     const margin = { top: 20, right: 150, bottom: 100, left: 50 }; // Increased right margin for legends
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;

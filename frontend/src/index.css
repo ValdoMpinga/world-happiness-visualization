@@ -4,8 +4,19 @@
   box-sizing: border-box;
 }
 
+main {
+  margin-left: 240px;
+  padding: 20px;
+  width: calc(100% - 240px);
+  height: 100vh;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 header {
-  background-color: #f39c12; /* Vibrant orange */
+  background-color: #f39c12;
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -17,7 +28,7 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #2980b9; /* Rich blue */
+  background-color: #2980b9; 
   padding-top: 60px;
   display: flex;
   flex-direction: column;
@@ -32,29 +43,32 @@ header {
 }
 
 .side-menu a:hover {
-  background-color: #1a5276; /* Darker blue on hover */
+  background-color: #1a5276; 
 }
 
-main {
-  margin-left: 240px;
-  padding: 20px;
-  width: calc(100% - 240px);
-  height: 100vh;
-  background-color: #ecf0f1;
-}
-
-/* Save button style */
-.save-button {
+.save-button-wrapper {
+  margin: 0 auto; 
   margin-top: auto;
-  padding: 10px 20px;
-  background-color: #27ae60; /* Lively green */
+  padding: 10px; 
+  background-color: #2980b9;
+  border-radius: 5px; 
+  width: 200px; 
+  margin-left: 10px; 
+}
+
+.save-button {
+  width: 120px; 
+  height: 35px;
+  background-color: #27ae60;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
-  border-radius: 5px; /* Rounded corners */
+  border-radius: 5px;
+  margin-left: 35px;
+  margin-bottom: 15px;
 }
 
 .save-button:hover {
-  background-color: #219a52; /* Darker green on hover */
+  background-color: #219a52;
 }
