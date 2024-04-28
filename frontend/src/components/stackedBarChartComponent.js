@@ -13,6 +13,10 @@ function createStackedBarChart(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
+    // Create a group for the chart and remove button
+    const chartGroup = svg.append('g')
+        .attr('class', 'chart-group');
+
     // Extract the keys for stacked bars (excluding "Country" and "HealthyLife")
     const keys = Object.keys(data[0]).filter(key => key !== 'Country' && key !== 'HealthyLife');
 
@@ -42,7 +46,7 @@ function createStackedBarChart(data, containerId)
         .range(d3.schemeCategory10);
 
     // Create groups for each series
-    const groups = svg.selectAll('g')
+    const groups = chartGroup.selectAll('g')
         .data(series)
         .enter()
         .append('g')
@@ -60,7 +64,7 @@ function createStackedBarChart(data, containerId)
 
     // Create x-axis
     const xAxis = d3.axisBottom(xScale);
-    svg.append('g')
+    chartGroup.append('g')
         .attr('transform', `translate(0, ${innerHeight})`)
         .call(xAxis)
         .selectAll('text')
@@ -69,7 +73,7 @@ function createStackedBarChart(data, containerId)
 
     // Create y-axis
     const yAxis = d3.axisLeft(yScale);
-    svg.append('g')
+    chartGroup.append('g')
         .attr('transform', `translate(${margin.left}, 0)`)
         .call(yAxis);
 
@@ -106,6 +110,32 @@ function createStackedBarChart(data, containerId)
         .attr('y', 9)
         .attr('dy', '.35em')
         .text(d => d);
+
+    // Create the remove button
+    const removeButton = chartGroup.append('g')
+        .attr('class', 'remove-button')
+        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
+        .attr('cursor', 'pointer')
+        .on('click', removeChart);
+
+    removeButton.append('rect')
+        .attr('width', 70)
+        .attr('height', 20)
+        .attr('fill', 'red');
+
+    // Add text to the remove button
+    removeButton.append('text')
+        .attr('x', 35)
+        .attr('y', 15)
+        .attr('fill', 'white')
+        .attr('text-anchor', 'middle')
+        .text('Remove');
+
+    // Function to remove the chart
+    function removeChart()
+    {
+        svg.remove();
+    }
 }
 
 // Export the function

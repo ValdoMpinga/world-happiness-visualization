@@ -13,6 +13,10 @@ function createScatterPlot(data, containerId)
         .attr('width', width)
         .attr('height', height);
 
+    // Create a group for the scatter plot and remove button
+    const scatterGroup = svg.append('g')
+        .attr('class', 'scatter-group');
+
     // Create scales for x and y axes
     const xScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => parseFloat(d.GDPerCapita))])
@@ -23,7 +27,7 @@ function createScatterPlot(data, containerId)
         .range([innerHeight, margin.top]);
 
     // Create circles for each data point
-    svg.selectAll('circle')
+    scatterGroup.selectAll('circle')
         .data(data)
         .enter()
         .append('circle')
@@ -34,13 +38,13 @@ function createScatterPlot(data, containerId)
 
     // Create x-axis
     const xAxis = d3.axisBottom(xScale);
-    svg.append('g')
+    scatterGroup.append('g')
         .attr('transform', `translate(0, ${innerHeight})`)
         .call(xAxis);
 
     // Create y-axis
     const yAxis = d3.axisLeft(yScale);
-    svg.append('g')
+    scatterGroup.append('g')
         .attr('transform', `translate(${margin.left}, 0)`)
         .call(yAxis);
 
@@ -57,6 +61,32 @@ function createScatterPlot(data, containerId)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
         .text('Happiness Score');
+
+    // Create the remove button
+    const removeButton = scatterGroup.append('g')
+        .attr('class', 'remove-button')
+        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
+        .attr('cursor', 'pointer')
+        .on('click', removeChart);
+
+    removeButton.append('rect')
+        .attr('width', 70)
+        .attr('height', 20)
+        .attr('fill', 'red');
+
+    // Add text to the remove button
+    removeButton.append('text')
+        .attr('x', 35)
+        .attr('y', 15)
+        .attr('fill', 'white')
+        .attr('text-anchor', 'middle')
+        .text('Remove');
+
+    // Function to remove the chart
+    function removeChart()
+    {
+        svg.remove();
+    }
 }
 
 export default createScatterPlot;

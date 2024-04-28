@@ -23,7 +23,6 @@ function createLineChart(data, containerId)
         .domain([0, d3.max(data, d => parseFloat(d.y))]) // Convert y values to numbers
         .range([innerHeight, margin.top]);
 
-
     // Define the line function
     const line = d3.line()
         .x(d => xScale(d.x))
@@ -62,6 +61,32 @@ function createLineChart(data, containerId)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
         .text('Y Axis Label');
+
+    // Create the remove button
+    const removeButton = svg.append('g')
+        .attr('class', 'remove-button')
+        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
+        .attr('cursor', 'pointer')
+        .on('click', removeChart);
+
+    removeButton.append('rect')
+        .attr('width', 70)
+        .attr('height', 20)
+        .attr('fill', 'red');
+
+    // Add text to the remove button
+    removeButton.append('text')
+        .attr('x', 35)
+        .attr('y', 15)
+        .attr('fill', 'white')
+        .attr('text-anchor', 'middle')
+        .text('Remove');
+
+    // Function to remove the chart
+    function removeChart()
+    {
+        svg.remove();
+    }
 }
 
 export default createLineChart;
