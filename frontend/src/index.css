@@ -18,6 +18,8 @@ header {
   left: 0;
   background-color: #111;
   padding-top: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .side-menu a {
@@ -33,9 +35,17 @@ header {
 }
 
 main {
-  margin-left: 220px; 
+  margin-left: 220px;
   padding: 20px;
-  width: calc(100% - 220px); 
-  height: 100vh; 
-  box-sizing: border-box; 
+  width: calc(100% - 220px);
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.side-menu a {
+  margin-bottom: 10px;
+}
+
+.save-button {
+  margin-top: auto;
 }

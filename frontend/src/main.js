@@ -4,6 +4,7 @@ import createLineChart from './components/lineChartComponent.js';
 import createBubbleChart from './components/bubbleChartComponent.js';
 import createStackedBarChart from './components/stackedBarChartComponent.js';
 import ChartDataService from './api/ChartDataService.js';
+import localStorageHelper from './helpers/localStorageHelper.js';
 
 const containerId = '#chart-container';
 
@@ -18,7 +19,6 @@ class Main
     {
         let barChartData = await this.chartDataServiceInstance.getBarChartData(year)
         barChartData = barChartData.slice(0, 50);
-        console.log(barChartData);
 
         createBarChart(barChartData, containerId);
     }
@@ -33,7 +33,6 @@ class Main
     async buildLineChart()
     {
         let lineChart = await this.chartDataServiceInstance.getLineChartData()
-        console.log(lineChart.happinessByCountry);
 
         const transformedData = Object.entries(lineChart.happinessByCountry).map(([year, value]) => ({
             x: year, // Convert year to integer
@@ -43,7 +42,7 @@ class Main
         createLineChart(transformedData, containerId);
     }
 
-    async buildStackedBarChart()
+    async buildStackedBarChart(year)
     {
         const stackedBarChartMockData = [
             { category: 'A', value1: 10, value2: 20, value3: 15 },
@@ -52,11 +51,8 @@ class Main
         ];
         stackedBarChartMockData.columns = ['category', 'value1', 'value2', 'value3'];
 
-        let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(2017)
+        let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(year)
         stackedBarChartData = stackedBarChartData.slice(0, 40);
-
-        console.log(stackedBarChartData);
-
 
         createStackedBarChart(stackedBarChartData, containerId);
     }
@@ -65,7 +61,6 @@ class Main
     {
         let bubbleChartData = await this.chartDataServiceInstance.getBubbleChartData(2017)
         bubbleChartData = bubbleChartData.slice(0, 150);
-        console.log(bubbleChartData);
 
         createBubbleChart(bubbleChartData, containerId);
     }

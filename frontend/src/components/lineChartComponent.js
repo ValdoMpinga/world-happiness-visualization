@@ -86,6 +86,8 @@ function createLineChart(data, containerId)
     function removeChart()
     {
         svg.remove();
+        window.appState = window.appState.filter(item => item.chartType !== 'line');
+        localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

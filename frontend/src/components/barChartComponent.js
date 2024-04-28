@@ -106,6 +106,8 @@ function createBarChart(apiData, containerId)
     function removeChart()
     {
         d3.select(containerId).selectAll('svg').remove();
+        window.appState = window.appState.filter(item => item.chartType !== 'bar');
+        localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

@@ -135,6 +135,8 @@ function createStackedBarChart(data, containerId)
     function removeChart()
     {
         svg.remove();
+        window.appState = window.appState.filter(item => item.chartType !== 'stacked');
+        localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

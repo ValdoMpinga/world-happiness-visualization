@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="main.js" type="module"></script>
+    <script src="./helpers/localStorageHelper.js" type="module"></script>
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
@@ -27,12 +29,26 @@
       <a data-class="bubble" draggable="true" ondragstart="drag(event)"
         >Social support vs freedom</a
       >
+
+      <button onclick="saveChart()">Save</button>
     </div>
     <main ondrop="drop(event)" ondragover="allowDrop(event)">
       <div id="chart-container"></div>
     </main>
-    <script src="main.js" type="module"></script>
+
     <script>
+      window.onload = function () {
+        console.log("Loading appState from local storage!");
+        const storedAppState = localStorage.getItem("appState");
+        if (storedAppState) {
+          window.appState = JSON.parse(storedAppState);
+          window.appState.forEach((chart) => {
+            console.log(chart);
+            chartsRenderer(chart.chartType);
+          });
+        }
+      };
+
       const CHART_TYPE = {
         bar: "bar",
         scatter: "scatter",
@@ -40,6 +56,7 @@
         bubble: "bubble",
         stackedBar: "stacked",
       };
+      window.appState = [];
 
       function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.innerText);
@@ -54,25 +71,37 @@
         ev.preventDefault();
         var className = ev.dataTransfer.getData("className");
 
-        console.log(className);
-
         const main = window.main;
 
-        switch (className) {
+        chartsRenderer(className);
+      }
+
+      function saveChart() {
+        localStorage.setItem("appState", JSON.stringify(window.appState));
+        console.log("app state saved to local storage!");
+      }
+
+      function chartsRenderer(chartType) {
+        switch (chartType) {
           case CHART_TYPE.bar:
             main.buildBarChart(2016);
+            window.appState.push({ chartType: CHART_TYPE.bar, year: 2016 });
             break;
           case CHART_TYPE.scatter:
             main.buildScatterPlotChart(2017);
+            window.appState.push({ chartType: CHART_TYPE.scatter, year: 2017 });
             break;
           case CHART_TYPE.line:
             main.buildLineChart();
+            window.appState.push({ chartType: CHART_TYPE.line });
             break;
           case CHART_TYPE.stackedBar:
-            main.buildStackedBarChart();
+            main.buildStackedBarChart(2017);
+            window.appState.push({ chartType: CHART_TYPE.stackedBar });
             break;
           case CHART_TYPE.bubble:
             main.buildBubbleChart(2017);
+            window.appState.push({ chartType: CHART_TYPE.bubble, year: 2017 });
             break;
         }
       }

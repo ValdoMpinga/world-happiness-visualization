@@ -88,6 +88,8 @@ function createBubbleChart(data, containerId)
     function removeChart()
     {
         svg.remove();
+        window.appState = window.appState.filter(item => item.chartType !== 'bubble');
+        localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 
