@@ -4,7 +4,6 @@ import createLineChart from './components/lineChartComponent.js';
 import createBubbleChart from './components/bubbleChartComponent.js';
 import createStackedBarChart from './components/stackedBarChartComponent.js';
 import ChartDataService from './api/ChartDataService.js';
-import localStorageHelper from './helpers/localStorageHelper.js';
 
 const containerId = '#chart-container';
 
