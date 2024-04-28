@@ -5,7 +5,6 @@ import createBubbleChart from './components/bubbleChartComponent.js';
 import createStackedBarChart from './components/stackedBarChartComponent.js';
 import ChartDataService from './api/ChartDataService.js';
 
-const containerId = '#chart-container';
 const barChartContainerId = '#bar-chart-container';
 const bubbleChartContainerId = '#bubble-chart-container';
 const lineChartContainerId = '#line-chart-container';
