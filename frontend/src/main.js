@@ -6,6 +6,11 @@ import createStackedBarChart from './components/stackedBarChartComponent.js';
 import ChartDataService from './api/ChartDataService.js';
 
 const containerId = '#chart-container';
+const barChartContainerId = '#bar-chart-container';
+const bubbleChartContainerId = '#bubble-chart-container';
+const lineChartContainerId = '#line-chart-container';
+const scatterChartContainerId = '#scatter-chart-container';
+const stackedContainerId = '#stacked-chart-container';
 
 class Main
 {
@@ -19,14 +24,14 @@ class Main
         let barChartData = await this.chartDataServiceInstance.getBarChartData(year)
         barChartData = barChartData.slice(0, 50);
 
-        createBarChart(barChartData, containerId);
+        createBarChart(barChartData, barChartContainerId);
     }
 
     async buildScatterPlotChart(year)
     {
         let scatterPlotChartData = await this.chartDataServiceInstance.getScatterChartData(year)
 
-        createScatterPlot(scatterPlotChartData, containerId)
+        createScatterPlot(scatterPlotChartData, scatterChartContainerId)
     }
 
     async buildLineChart()
@@ -38,7 +43,7 @@ class Main
             y: value.toFixed(2) // Keep only 2 decimal places for the value
         }));
 
-        createLineChart(transformedData, containerId);
+        createLineChart(transformedData, lineChartContainerId);
     }
 
     async buildStackedBarChart(year)
@@ -53,7 +58,7 @@ class Main
         let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(year)
         stackedBarChartData = stackedBarChartData.slice(0, 40);
 
-        createStackedBarChart(stackedBarChartData, containerId);
+        createStackedBarChart(stackedBarChartData, stackedContainerId);
     }
 
     async buildBubbleChart()
@@ -61,7 +66,7 @@ class Main
         let bubbleChartData = await this.chartDataServiceInstance.getBubbleChartData(2017)
         bubbleChartData = bubbleChartData.slice(0, 150);
 
-        createBubbleChart(bubbleChartData, containerId);
+        createBubbleChart(bubbleChartData, bubbleChartContainerId);
     }
 }
 

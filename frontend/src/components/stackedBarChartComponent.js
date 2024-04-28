@@ -1,9 +1,9 @@
 function createStackedBarChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 1000;
+    const width = 1200; // Increased width to accommodate legends
     const height = 600;
-    const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+    const margin = { top: 20, right: 150, bottom: 100, left: 50 }; // Increased right margin for legends
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -114,7 +114,7 @@ function createStackedBarChart(data, containerId)
     // Create the remove button
     const removeButton = chartGroup.append('g')
         .attr('class', 'remove-button')
-        .attr('transform', `translate(${width - margin.right - 80}, ${margin.top})`)
+        .attr('transform', `translate(${width - margin.right - 140}, ${margin.top})`)
         .attr('cursor', 'pointer')
         .on('click', removeChart);
 
@@ -136,7 +136,7 @@ function createStackedBarChart(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'stacked');
-        localStorage.setItem('appState', JSON.stringify(window.appState));
+        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

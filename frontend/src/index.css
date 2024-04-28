@@ -1,51 +1,60 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 header {
-  background-color: #333;
+  background-color: #f39c12; /* Vibrant orange */
   color: white;
-  padding: 10px;
+  padding: 20px 0;
   text-align: center;
 }
 
 .side-menu {
   height: 100%;
-  width: 200px;
+  width: 220px;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #111;
-  padding-top: 20px;
+  background-color: #2980b9; /* Rich blue */
+  padding-top: 60px;
   display: flex;
   flex-direction: column;
 }
 
 .side-menu a {
-  padding: 10px;
-  display: block;
-  color: white;
+  padding: 15px 20px;
+  color: #ecf0f1;
   text-decoration: none;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .side-menu a:hover {
-  background-color: #555;
+  background-color: #1a5276; /* Darker blue on hover */
 }
 
 main {
-  margin-left: 220px;
+  margin-left: 240px;
   padding: 20px;
-  width: calc(100% - 220px);
+  width: calc(100% - 240px);
   height: 100vh;
-  box-sizing: border-box;
+  background-color: #ecf0f1;
 }
 
-.side-menu a {
-  margin-bottom: 10px;
-}
-
+/* Save button style */
 .save-button {
   margin-top: auto;
+  padding: 10px 20px;
+  background-color: #27ae60; /* Lively green */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px; /* Rounded corners */
+}
+
+.save-button:hover {
+  background-color: #219a52; /* Darker green on hover */
 }

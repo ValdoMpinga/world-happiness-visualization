@@ -11,7 +11,7 @@ function createBarChart(apiData, containerId)
     const height = 400;
 
     // Set the margins
-    const margin = { top: 20, right: 20, bottom: 50, left: 100 };
+    const margin = { top: 20, right: 20, bottom: 100, left: 100 };
 
     // Calculate the inner width and height
     const innerWidth = width - margin.left - margin.right;
@@ -107,7 +107,7 @@ function createBarChart(apiData, containerId)
     {
         d3.select(containerId).selectAll('svg').remove();
         window.appState = window.appState.filter(item => item.chartType !== 'bar');
-        localStorage.setItem('appState', JSON.stringify(window.appState));
+        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

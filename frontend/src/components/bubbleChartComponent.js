@@ -1,7 +1,7 @@
 function createBubbleChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 800;
+    const width = 1000;
     const height = 400;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
@@ -89,7 +89,7 @@ function createBubbleChart(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'bubble');
-        localStorage.setItem('appState', JSON.stringify(window.appState));
+        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

@@ -1,11 +1,14 @@
 function createLineChart(data, containerId)
 {
     // Set the dimensions of the SVG container
-    const width = 600;
+    const width = 1000;
     const height = 400;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
+
+    // Extract the years from data for domain of x-axis
+    const years = data.map(d => d.x);
 
     // Create SVG container
     const svg = d3.select(containerId)
@@ -14,18 +17,18 @@ function createLineChart(data, containerId)
         .attr('height', height);
 
     // Create scales
-    const xScale = d3.scaleLinear()
-        .domain([d3.min(data, d => d.x), d3.max(data, d => d.x)])
-        .range([margin.left, innerWidth]);
-
+    const xScale = d3.scaleBand()
+        .domain(years) // Use years as domain
+        .range([margin.left, innerWidth])
+        .padding(0.1);
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => parseFloat(d.y))]) // Convert y values to numbers
+        .domain([0, d3.max(data, d => parseFloat(d.y))])
         .range([innerHeight, margin.top]);
 
     // Define the line function
     const line = d3.line()
-        .x(d => xScale(d.x))
+        .x(d => xScale(d.x) + xScale.bandwidth() / 2) // Adjust x position for centering within band
         .y(d => yScale(d.y));
 
     // Append the line path
@@ -53,14 +56,14 @@ function createLineChart(data, containerId)
         .attr('x', width / 2)
         .attr('y', height - margin.bottom / 2)
         .style('text-anchor', 'middle')
-        .text('X Axis Label');
+        .text('Years');
 
     svg.append('text')
         .attr('transform', 'rotate(-90)')
         .attr('x', -height / 2)
         .attr('y', margin.left / 2)
         .style('text-anchor', 'middle')
-        .text('Y Axis Label');
+        .text('Happiness Score');
 
     // Create the remove button
     const removeButton = svg.append('g')
@@ -87,7 +90,7 @@ function createLineChart(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'line');
-        localStorage.setItem('appState', JSON.stringify(window.appState));
+        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

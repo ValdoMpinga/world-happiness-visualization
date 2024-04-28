@@ -87,7 +87,7 @@ function createScatterPlot(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'scatter');
-        localStorage.setItem('appState', JSON.stringify(window.appState));
+        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 
