@@ -49,7 +49,7 @@ function createStackedBarChart(data, containerId)
         .data(series)
         .enter()
         .append('g')
-        .style('fill', (d, i) => color(i));
+        .style('fill', (d, i) => color(keys[i]));
 
     // Create rectangles for each segment
     groups.selectAll('rect')
@@ -94,7 +94,7 @@ function createStackedBarChart(data, containerId)
     const legend = svg.append('g')
         .attr('transform', `translate(${innerWidth - 10}, 20)`)
         .selectAll('g')
-        .data(keys.slice().reverse())
+        .data(keys)
         .enter()
         .append('g')
         .attr('transform', (d, i) => `translate(0, ${i * 20})`);
@@ -102,7 +102,7 @@ function createStackedBarChart(data, containerId)
     legend.append('rect')
         .attr('width', 18)
         .attr('height', 18)
-        .attr('fill', color);
+        .attr('fill', (d, i) => color(d));
 
     legend.append('text')
         .attr('x', 24)

@@ -65,7 +65,7 @@ class Main
         stackedBarChartMockData.columns = ['category', 'value1', 'value2', 'value3'];
 
         let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(year)
-        stackedBarChartData = this.shuffleData(stackedBarChartData).slice(0, 30);
+        stackedBarChartData = this.shuffleData(stackedBarChartData).slice(0, 50);
 
         createStackedBarChart(stackedBarChartData, stackedContainerId);
     }
