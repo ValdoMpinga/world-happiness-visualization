@@ -73,7 +73,6 @@ class Main
     async buildBubbleChart()
     {
         let bubbleChartData = await this.chartDataServiceInstance.getBubbleChartData(2017)
-        bubbleChartData = bubbleChartData.slice(0, 20);
 
         createBubbleChart(bubbleChartData, bubbleChartContainerId);
     }
