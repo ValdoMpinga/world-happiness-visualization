@@ -18,10 +18,20 @@ class Main
         this.chartDataServiceInstance = new ChartDataService()
     }
 
+    shuffleData(data)
+    {
+        for (let i = data.length - 1; i > 0; i--)
+        {
+            const j = Math.floor(Math.random() * (i + 1));
+            [data[i], data[j]] = [data[j], data[i]];
+        }
+        return data;
+    }
+
     async buildBarChart(year)
     {
         let barChartData = await this.chartDataServiceInstance.getBarChartData(year)
-        barChartData = barChartData.slice(0, 50);
+        barChartData = this.shuffleData(barChartData).slice(0, 50);
 
         createBarChart(barChartData, barChartContainerId);
     }
@@ -38,8 +48,8 @@ class Main
         let lineChart = await this.chartDataServiceInstance.getLineChartData()
 
         const transformedData = Object.entries(lineChart.happinessByCountry).map(([year, value]) => ({
-            x: year, // Convert year to integer
-            y: value.toFixed(2) // Keep only 2 decimal places for the value
+            x: year, 
+            y: value.toFixed(2)
         }));
 
         createLineChart(transformedData, lineChartContainerId);
@@ -55,7 +65,7 @@ class Main
         stackedBarChartMockData.columns = ['category', 'value1', 'value2', 'value3'];
 
         let stackedBarChartData = await this.chartDataServiceInstance.getStackedChartData(year)
-        stackedBarChartData = stackedBarChartData.slice(0, 40);
+        stackedBarChartData = this.shuffleData(stackedBarChartData).slice(0, 30);
 
         createStackedBarChart(stackedBarChartData, stackedContainerId);
     }
@@ -63,7 +73,7 @@ class Main
     async buildBubbleChart()
     {
         let bubbleChartData = await this.chartDataServiceInstance.getBubbleChartData(2017)
-        bubbleChartData = bubbleChartData.slice(0, 150);
+        bubbleChartData = bubbleChartData.slice(0, 20);
 
         createBubbleChart(bubbleChartData, bubbleChartContainerId);
     }

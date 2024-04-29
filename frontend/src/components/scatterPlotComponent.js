@@ -1,6 +1,5 @@
 function createScatterPlot(data, containerId)
 {
-    // Set the dimensions of the SVG container
     const width = 1000;
     const height = 400;
     const margin = { top: 20, right: 20, bottom: 50, left: 50 };
@@ -87,7 +86,6 @@ function createScatterPlot(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'scatter');
-        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 

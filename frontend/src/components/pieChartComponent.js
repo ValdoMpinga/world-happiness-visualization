@@ -1,6 +1,5 @@
 function createPieChart(data, containerId)
 {
-    // Set the dimensions of the SVG container
     const width = 600;
     const height = 400;
     const radius = Math.min(width, height) / 2;

@@ -99,14 +99,12 @@
         alert("Dashboard state saved!");
       }
       function chartsRenderer(chartType) {
-        // Define container IDs
         const barChartContainerId = "#bar-chart-container";
         const scatterChartContainerId = "#scatter-chart-container";
         const lineChartContainerId = "#line-chart-container";
         const stackedContainerId = "#stacked-chart-container";
         const bubbleChartContainerId = "#bubble-chart-container";
 
-        // Check if the chart container is empty
         let chartContainerIsEmpty = false;
         switch (chartType) {
           case CHART_TYPE.bar:
@@ -136,7 +134,6 @@
             break;
         }
 
-        // If the chart container is empty, render the chart
         if (chartContainerIsEmpty) {
           switch (chartType) {
             case CHART_TYPE.bar:

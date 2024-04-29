@@ -1,6 +1,5 @@
 function createStackedBarChart(data, containerId)
 {
-    // Set the dimensions of the SVG container
     const width = 1000;
     const height = 400;
     const margin = { top: 20, right: 150, bottom: 100, left: 50 }; // Increased right margin for legends
@@ -136,7 +135,6 @@ function createStackedBarChart(data, containerId)
     {
         svg.remove();
         window.appState = window.appState.filter(item => item.chartType !== 'stacked');
-        // localStorage.setItem('appState', JSON.stringify(window.appState));
     }
 }
 
